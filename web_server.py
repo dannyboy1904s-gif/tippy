@@ -84,6 +84,21 @@ def get_tips():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# Demo mode endpoint
+@app.route('/api/demo-tips')
+def get_demo_tips():
+    """Get demo tips when API limits are reached."""
+    demo_tips = [
+        {'home_team': 'Manchester City', 'away_team': 'Liverpool', 'league': 'Premier League', 'date': '2026-02-15', 'prediction': 'Home Win', 'confidence': 'HIGH', 'edge': 28.5, 'kelly_pct': 4.2, 'kelly_units': 42, 'odds': 2.15},
+        {'home_team': 'Bayern Munich', 'away_team': 'Dortmund', 'league': 'Bundesliga', 'date': '2026-02-15', 'prediction': 'Home Win', 'confidence': 'HIGH', 'edge': 24.3, 'kelly_pct': 5.1, 'kelly_units': 51, 'odds': 1.95},
+        {'home_team': 'Real Madrid', 'away_team': 'Barcelona', 'league': 'La Liga', 'date': '2026-02-16', 'prediction': 'Draw', 'confidence': 'MEDIUM', 'edge': 18.7, 'kelly_pct': 3.2, 'kelly_units': 32, 'odds': 3.40},
+        {'home_team': 'Inter Milan', 'away_team': 'Juventus', 'league': 'Serie A', 'date': '2026-02-15', 'prediction': 'Home Win', 'confidence': 'MEDIUM', 'edge': 15.2, 'kelly_pct': 2.8, 'kelly_units': 28, 'odds': 2.45},
+        {'home_team': 'PSG', 'away_team': 'Monaco', 'league': 'Ligue 1', 'date': '2026-02-15', 'prediction': 'Home Win', 'confidence': 'MEDIUM', 'edge': 12.5, 'kelly_pct': 2.1, 'kelly_units': 21, 'odds': 1.75},
+        {'home_team': 'Arsenal', 'away_team': 'Tottenham', 'league': 'Premier League', 'date': '2026-02-16', 'prediction': 'Home Win', 'confidence': 'HIGH', 'edge': 22.1, 'kelly_pct': 4.8, 'kelly_units': 48, 'odds': 1.88}
+    ]
+    demo_stats = {'total_tips': 156, 'pending': 12, 'resulted': 144, 'wins': 90, 'accuracy': 62.5, 'roi': 1520, 'roi_pct': 15.2, 'profit': 1520}
+    return jsonify({'tips': demo_tips, 'stats': demo_stats, 'mode': 'demo', 'message': 'Demo mode - Connect API keys for real tips'})
+
 @app.route('/api/analyze', methods=['POST'])
 def run_analysis():
     """Run full analysis and generate tips."""
