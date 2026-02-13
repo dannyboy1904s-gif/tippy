@@ -99,6 +99,9 @@ def get_demo_tips():
     demo_stats = {'total_tips': 156, 'pending': 12, 'resulted': 144, 'wins': 90, 'accuracy': 62.5, 'roi': 1520, 'roi_pct': 15.2, 'profit': 1520}
     return jsonify({'tips': demo_tips, 'stats': demo_stats, 'mode': 'demo', 'message': 'Demo mode - Connect API keys for real tips'})
 
+DEMO_TIPS = demo_tips
+DEMO_STATS = demo_stats
+
 @app.route('/api/analyze', methods=['POST'])
 def run_analysis():
     """Run full analysis and generate tips."""
@@ -121,6 +124,14 @@ def run_analysis():
                 'odds': tip.odds
             })
         
+        # If no tips generated, use demo
+        if not tips_data:
+            return jsonify({
+                'tips': DEMO_TIPS,
+                'stats': DEMO_STATS,
+                'mode': 'demo'
+            })
+        
         stats = betting_app.get_performance()
         
         return jsonify({
@@ -134,11 +145,17 @@ def run_analysis():
                 'roi': stats['roi'],
                 'roi_pct': stats['roi_pct'],
                 'profit': round(stats['roi'], 2)
-            }
+            },
+            'mode': 'live'
         })
     
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({
+            'tips': DEMO_TIPS,
+            'stats': DEMO_STATS,
+            'mode': 'demo',
+            'error': str(e)
+        })
 
 @app.route('/api/performance')
 def get_performance():
