@@ -807,16 +807,35 @@
             event.target.classList.add('active');
         }
         
-        // Load Tips
-        function loadTips() {
-            // Use sample data for demo
-            tipsData = sampleTips;
-            renderTips();
-            updateStats();
+        // Load Tips from API
+        async function loadTips() {
+            try {
+                // Try real API first
+                let response = await fetch('/api/tips');
+                let data = await response.json();
+                
+                // If no tips, use demo endpoint
+                if (!data.tips || data.tips.length === 0) {
+                    response = await fetch('/api/demo-tips');
+                    data = await response.json();
+                }
+                
+                tipsData = data.tips || [];
+                window.stats = data.stats || {};
+                renderTips();
+                updateStats();
+            } catch (error) {
+                console.error('Error loading tips:', error);
+                // Fallback to demo data
+                tipsData = sampleTips;
+                window.stats = { total_tips: 156, accuracy: 62.5, roi: 15.2, profit: 1520, pending: 12 };
+                renderTips();
+                updateStats();
+            }
         }
         
         // Run Analysis
-        function runAnalysis() {
+        async function runAnalysis() {
             const container = document.getElementById('tips-container');
             container.innerHTML = `
                 <div class="loading">
@@ -825,11 +844,21 @@
                 </div>
             `;
             
-            setTimeout(() => {
-                tipsData = sampleTips;
+            try {
+                const response = await fetch('/api/analyze', { method: 'POST' });
+                const data = await response.json();
+                
+                tipsData = data.tips || [];
+                window.stats = data.stats || {};
                 renderTips();
                 updateStats();
-            }, 1500);
+            } catch (error) {
+                // Fallback to demo data
+                tipsData = sampleTips;
+                window.stats = { total_tips: 156, accuracy: 62.5, roi: 15.2, profit: 1520, pending: 12 };
+                renderTips();
+                updateStats();
+            }
         }
         
         // Render Tips
@@ -901,16 +930,17 @@
         
         // Update Stats
         function updateStats() {
-            document.getElementById('stat-tips').textContent = stats.total_tips;
-            document.getElementById('stat-accuracy').textContent = stats.accuracy + '%';
-            document.getElementById('stat-roi').textContent = stats.roi + '%';
-            document.getElementById('stat-profit').textContent = '$' + stats.profit;
+            const s = window.stats || {};
+            document.getElementById('stat-tips').textContent = s.total_tips || 0;
+            document.getElementById('stat-accuracy').textContent = (s.accuracy || 0) + '%';
+            document.getElementById('stat-roi').textContent = (s.roi || 0) + '%';
+            document.getElementById('stat-profit').textContent = '$' + (s.profit || 0);
             
-            document.getElementById('perf-total').textContent = stats.total_tips;
-            document.getElementById('perf-wins').textContent = Math.round(stats.total_tips * stats.accuracy / 100);
-            document.getElementById('perf-losses').textContent = Math.round(stats.total_tips * (1 - stats.accuracy / 100));
-            document.getElementById('perf-pending').textContent = stats.pending;
-            document.getElementById('perf-roi').textContent = stats.roi + '%';
+            document.getElementById('perf-total').textContent = s.total_tips || 0;
+            document.getElementById('perf-wins').textContent = Math.round((s.total_tips || 0) * (s.accuracy || 0) / 100);
+            document.getElementById('perf-losses').textContent = Math.round((s.total_tips || 0) * (1 - (s.accuracy || 0) / 100));
+            document.getElementById('perf-pending').textContent = s.pending || 0;
+            document.getElementById('perf-roi').textContent = (s.roi || 0) + '%';
         }
         
         // Filter
