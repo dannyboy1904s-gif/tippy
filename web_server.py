@@ -14,7 +14,7 @@ import sys
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app import BettingApp, CONFIG
+from app import BettingApp, CONFIG, DB_PATH
 
 app = Flask(__name__, 
             static_folder='static',
@@ -40,7 +40,7 @@ def get_tips():
     try:
         # Load tips from database
         import sqlite3
-        conn = sqlite3.connect(betting_app.DB_PATH)
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
         cursor.execute("SELECT * FROM tips WHERE status = 'pending' ORDER BY edge DESC")
@@ -145,7 +145,7 @@ def get_history():
     """Get betting history."""
     try:
         import sqlite3
-        conn = sqlite3.connect(betting_app.DB_PATH)
+        conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
         
         cursor.execute("SELECT * FROM tips WHERE status = 'resulted' ORDER BY date DESC LIMIT 50")
@@ -190,7 +190,7 @@ def settings():
             
             # Save to database
             import sqlite3
-            conn = sqlite3.connect(betting_app.DB_PATH)
+            conn = sqlite3.connect(DB_PATH)
             cursor = conn.cursor()
             
             for key, value in new_settings.items():
