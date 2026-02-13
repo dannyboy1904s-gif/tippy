@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚽ Betting Pro AI - World's Best Tips App</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #16213e;
+            --accent: #00d4ff;
+            --accent-green: #00ff88;
+            --accent-red: #ff4757;
+            --accent-yellow: #ffa502;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+            --border: #2a2a4a;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--accent) 0%, #667eea 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .logo-text span {
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* Stats Bar */
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px 20px;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        
+        /* Navigation */
+        .nav {
+            background: var(--bg-secondary);
+            padding: 10px 20px;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg-primary);
+        }
+        
+        .nav-btn:hover:not(.active) {
+            background: var(--bg-card);
+        }
+        
+        /* Main Content */
+        .main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Section */
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Tips List */
+        .tips-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .tip-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 18px;
+            border-left: 4px solid var(--accent);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .tip-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+        }
+        
+        .tip-card.high {
+            border-left-color: var(--accent-green);
+        }
+        
+        .tip-card.medium {
+            border-left-color: var(--accent-yellow);
+        }
+        
+        .tip-card.low {
+            border-left-color: var(--accent-red);
+        }
+        
+        .tip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        
+        .tip-teams {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .tip-league {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: var(--bg-primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        
+        .tip-confidence {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .tip-confidence.high {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+        }
+        
+        .tip-confidence.medium {
+            background: rgba(255, 165, 2, 0.2);
+            color: var(--accent-yellow);
+        }
+        
+        .tip-confidence.low {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--accent-red);
+        }
+        
+        .tip-details {
+;
+            grid-template-columns: repeat(auto            display: grid-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .tip-detail {
+            text-align: center;
+        }
+        
+        .tip-detail-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .tip-detail-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        
+        .tip-pick {
+            background: linear-gradient(135deg, var(--accent) 0%, #667eea 100%);
+            color: var(--bg-primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        /* Analytics Charts */
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .chart-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .chart-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+        
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .bar-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .bar-label {
+            width: 80px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .bar-track {
+            flex: 1;
+            height: 20px;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, #667eea 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--bg-primary);
+        }
+        
+        .bar-value {
+            width: 50px;
+            text-align: right;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Performance Grid */
+        .perf-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .perf-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .perf-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .perf-value.green {
+            color: var(--accent-green);
+        }
+        
+        .perf-value.red {
+            color: var(--accent-red);
+        }
+        
+        .perf-value.yellow {
+            color: var(--accent-yellow);
+        }
+        
+        .perf-value.blue {
+            color: var(--accent);
+        }
+        
+        .perf-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+        
+        /* League Filter */
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--bg-primary);
+        }
+        
+        /* History Table */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .history-table th,
+        .history-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .history-table th {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        
+        .history-table tr:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .win-badge {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .loss-badge {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--accent-red);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        /* Settings */
+        .settings-group {
+            margin-bottom: 25px;
+        }
+        
+        .settings-label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .settings-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        
+        .settings-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .settings-slider {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--bg-secondary);
+            border-radius: 3px;
+            outline: none;
+        }
+        
+        .settings-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .stats-bar {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .stat-item {
+                padding: 8px 12px;
+            }
+            
+            .stat-value {
+                font-size: 1.2rem;
+            }
+            
+            .tip-details {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">⚽</div>
+                <div class="logo-text">
+                    <h1>Betting Pro AI</h1>
+                    <span>World's Best Tips</span>
+                </div>
+            </div>
+            
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-tips">0</div>
+                    <div class="stat-label">Tips</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-accuracy">0%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-roi">0%</div>
+                    <div class="stat-label">ROI</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="stat-profit">$0</div>
+                    <div class="stat-label">Profit</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Navigation -->
+    <nav class="nav">
+        <button class="nav-btn active" onclick="showSection('tips')">🎯 Tips</button>
+        <button class="nav-btn" onclick="showSection('analytics')">📊 Analytics</button>
+        <button class="nav-btn" onclick="showSection('performance')">💰 Performance</button>
+        <button class="nav-btn" onclick="showSection('history')">📜 History</button>
+        <button class="nav-btn" onclick="showSection('settings')">⚙️ Settings</button>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Tips Section -->
+        <section id="tips-section" class="section active">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">🎯 Today's Top Tips</div>
+                </div>
+                
+                <div class="filter-bar" id="league-filters">
+                    <button class="filter-btn active" data-league="all">All Leagues</button>
+                    <button class="filter-btn" data-league="PL">Premier League</button>
+                    <button class="filter-btn" data-league="BL1">Bundesliga</button>
+                    <button class="filter-btn" data-league="SA">Serie A</button>
+                    <button class="filter-btn" data-league="PD">La Liga</button>
+                    <button class="filter-btn" data-league="FL1">Ligue 1</button>
+                </div>
+                
+                <div class="tips-list" id="tips-list">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        Loading tips...
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Analytics Section -->
+        <section id="analytics-section" class="section">
+            <div class="card">
+                <div class="card-title">📊 Performance by League</div>
+                <div class="chart-container">
+                    <div class="chart-card">
+                        <div class="chart-title">Accuracy by League</div>
+                        <div class="bar-chart" id="league-accuracy">
+                            <div class="bar-item">
+                                <div class="bar-label">PL</div>
+                                <div class="bar-track">
+                                    <div class="bar-fill" style="width: 65%">65%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-title">ROI by League</div>
+                        <div class="bar-chart" id="league-roi">
+                            <div class="bar-item">
+                                <div class="bar-label">PL</div>
+                                <div class="bar-track">
+                                    <div class="bar-fill" style="width: 50%; background: linear-gradient(90deg, #00ff88 0%, #00ff88 100%)">+8.5%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">📈 Performance by Confidence</div>
+                <div class="perf-grid">
+                    <div class="perf-card">
+                        <div class="perf-value green" id="conf-high-acc">0%</div>
+                        <div class="perf-label">HIGH Accuracy</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value yellow" id="conf-med-acc">0%</div>
+                        <div class="perf-label">MEDIUM Accuracy</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value red" id="conf-low-acc">0%</div>
+                        <div class="perf-label">LOW Accuracy</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Performance Section -->
+        <section id="performance-section" class="section">
+            <div class="card">
+                <div class="card-title">💰 Bankroll Management</div>
+                <div class="perf-grid">
+                    <div class="perf-card">
+                        <div class="perf-value blue" id="bankroll">$1000</div>
+                        <div class="perf-label">Bankroll</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value green" id="kelly">35%</div>
+                        <div class="perf-label">Kelly Fraction</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value blue" id="max-kelly">7.5%</div>
+                        <div class="perf-label">Max Kelly</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value yellow" id="min-edge">10%</div>
+                        <div class="perf-label">Min Edge</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">📊 Overall Statistics</div>
+                <div class="perf-grid">
+                    <div class="perf-card">
+                        <div class="perf-value blue" id="total-tips">0</div>
+                        <div class="perf-label">Total Tips</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value" id="pending-tips">0</div>
+                        <div class="perf-label">Pending</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value green" id="wins">0</div>
+                        <div class="perf-label">Wins</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value red" id="losses">0</div>
+                        <div class="perf-label">Losses</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value green" id="overall-roi">0%</div>
+                        <div class="perf-label">Overall ROI</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value blue" id="avg-odds">0</div>
+                        <div class="perf-label">Avg Odds</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- History Section -->
+        <section id="history-section" class="section">
+            <div class="card">
+                <div class="card-title">📜 Betting History</div>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Match</th>
+                            <th>Pick</th>
+                            <th>Odds</th>
+                            <th>Result</th>
+                            <th>Profit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 30px; color: var(--text-secondary);">
+                                No betting history yet
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- Settings Section -->
+        <section id="settings-section" class="section">
+            <div class="card">
+                <div class="card-title">⚙️ Bot Settings</div>
+                
+                <div class="settings-group">
+                    <label class="settings-label">Bankroll ($)</label>
+                    <input type="number" class="settings-input" id="setting-bankroll" value="1000">
+                </div>
+                
+                <div class="settings-group">
+                    <label class="settings-label">Kelly Fraction: <span id="kelly-value">35</span>%</label>
+                    <input type="range" class="settings-slider" id="setting-kelly" min="10" max="100" value="35">
+                </div>
+                
+                <div class="settings-group">
+                    <label class="settings-label">Max Kelly per Bet: <span id="max-kelly-value">7.5</span>%</label>
+                    <input type="range" class="settings-slider" id="setting-max-kelly" min="1" max="20" value="7.5">
+                </div>
+                
+                <div class="settings-group">
+                    <label class="settings-label">Minimum Edge: <span id="min-edge-value">10</span>%</label>
+                    <input type="range" class="settings-slider" id="setting-min-edge" min="5" max="25" value="10">
+                </div>
+                
+                <button class="nav-btn active" onclick="saveSettings()" style="width: 100%; margin-top: 20px;">
+                    Save Settings
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">🔗 API Status</div>
+                <div class="perf-grid">
+                    <div class="perf-card">
+                        <div class="perf-value green">✓</div>
+                        <div class="perf-label">Football-Data.org</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value green">✓</div>
+                        <div class="perf-label">The Odds API</div>
+                    </div>
+                    <div class="perf-card">
+                        <div class="perf-value green">✓</div>
+                        <div class="perf-label">CoinGecko</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>🤖 Betting Pro AI v3.0</p>
+        <p>Powered by OpenClaw | ML-Powered Predictions</p>
+        <p style="margin-top: 10px; opacity: 0.6;">
+            ⚠️ Gambling involves risk. Bet responsibly.
+        </p>
+    </footer>
+    
+    <script>
+        // App State
+        let currentTips = [];
+        let currentFilter = 'all';
+        
+        // Navigation
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById(`${section}-section`).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Load Tips
+        async function loadTips() {
+            try {
+                const response = await fetch('/api/tips');
+                const data = await response.json();
+                
+                currentTips = data.tips || [];
+                renderTips();
+                updateStats(data.stats || {});
+            } catch (error) {
+                console.error('Error loading tips:', error);
+                document.getElementById('tips-list').innerHTML = `
+                    <div class="loading">
+                        <p>Unable to load tips. Running analysis...</p>
+                        <button class="nav-btn active" onclick="runAnalysis()" style="margin-top: 15px;">
+                            Run Analysis
+                        </button>
+                    </div>
+                `;
+            }
+        }
+        
+        // Run Analysis
+        async function runAnalysis() {
+            document.getElementById('tips-list').innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    Running ML analysis...
+                </div>
+            `;
+            
+            try {
+                const response = await fetch('/api/analyze', { method: 'POST' });
+                const data = await response.json();
+                
+                currentTips = data.tips || [];
+                renderTips();
+                updateStats(data.stats || {});
+            } catch (error) {
+                console.error('Error running analysis:', error);
+            }
+        }
+        
+        // Render Tips
+        function renderTips() {
+            const container = document.getElementById('tips-list');
+            
+            if (currentTips.length === 0) {
+                container.innerHTML = `
+                    <div class="loading">
+                        <p>No high-value tips available right now.</p>
+                        <p style="margin-top: 10px; opacity: 0.7;">Check back later for new predictions.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Filter
+            let filtered = currentTips;
+            if (currentFilter !== 'all') {
+                filtered = currentTips.filter(t => t.league && t.league.includes(currentFilter));
+            }
+            
+            container.innerHTML = filtered.map((tip, i) => `
+                <div class="tip-card ${tip.confidence.toLowerCase()}">
+                    <div class="tip-header">
+                        <div>
+                            <div class="tip-teams">${tip.home_team} vs ${tip.away_team}</div>
+                            <div class="tip-league">${tip.league} | ${tip.date}</div>
+                        </div>
+                        <div class="tip-confidence ${tip.confidence.toLowerCase()}">
+                            ${tip.confidence === 'HIGH' ? '🟢' : tip.confidence === 'MEDIUM' ? '🟡' : '🔴'} ${tip.confidence}
+                        </div>
+                    </div>
+                    
+                    <div class="tip-pick">💡 Pick: ${tip.prediction} @ ${tip.odds.toFixed(2)}</div>
+                    
+                    <div class="tip-details">
+                        <div class="tip-detail">
+                            <div class="tip-detail-value">+${tip.edge}%</div>
+                            <div class="tip-detail-label">Edge</div>
+                        </div>
+                        <div class="tip-detail">
+                            <div class="tip-detail-value">${tip.kelly_pct}%</div>
+                            <div class="tip-detail-label">Kelly</div>
+                        </div>
+                        <div class="tip-detail">
+                            <div class="tip-detail-value">${tip.kelly_units}</div>
+                            <div class="tip-detail-label">Units</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // Update Stats
+        function updateStats(stats) {
+            document.getElementById('stat-tips').textContent = stats.total_tips || 0;
+            document.getElementById('stat-accuracy').textContent = (stats.accuracy || 0) + '%';
+            document.getElementById('stat-roi').textContent = (stats.roi_pct || 0) + '%';
+            document.getElementById('stat-profit').textContent = '$' + (stats.profit || 0);
+            
+            // Performance section
+            document.getElementById('total-tips').textContent = stats.total_tips || 0;
+            document.getElementById('pending-tips').textContent = stats.pending || 0;
+            document.getElementById('wins').textContent = stats.wins || 0;
+            document.getElementById('losses').textContent = (stats.resulted || 0) - (stats.wins || 0);
+            document.getElementById('overall-roi').textContent = (stats.roi_pct || 0) + '%';
+        }
+        
+        // League Filters
+        document.getElementById('league-filters').addEventListener('click', (e) => {
+            if (e.target.classList.contains('filter-btn')) {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                currentFilter = e.target.dataset.league;
+                renderTips();
+            }
+        });
+        
+        // Settings
+        document.getElementById('setting-kelly').addEventListener('input', (e) => {
+            document.getElementById('kelly-value').textContent = e.target.value;
+        });
+        
+        document.getElementById('setting-max-kelly').addEventListener('input', (e) => {
+            document.getElementById('max-kelly-value').textContent = e.target.value;
+        });
+        
+        document.getElementById('setting-min-edge').addEventListener('input', (e) => {
+            document.getElementById('min-edge-value').textContent = e.target.value;
+        });
+        
+        function saveSettings() {
+            const settings = {
+                bankroll: parseFloat(document.getElementById('setting-bankroll').value),
+                kelly_fraction: parseFloat(document.getElementById('setting-kelly').value) / 100,
+                max_kelly_pct: parseFloat(document.getElementById('setting-max-kelly').value) / 100,
+                min_edge: parseFloat(document.getElementById('setting-min-edge').value)
+            };
+            
+            fetch('/api/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(settings)
+            }).then(() => {
+                alert('Settings saved!');
+            });
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTips();
+            
+            // Auto-refresh every 5 minutes
+            setInterval(loadTips, 300000);
+        });
+    </script>
+</body>
+</html>
